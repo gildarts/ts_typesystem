@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "start": "tsc -p tsconfig.json -w"
+  },
+  "dependencies": {
+    "@types/systemjs": "^0.20.6",
+    "systemjs": "^0.21.3",
+    "tslint": "^5.10.0"
+  }
+}
