@@ -47,20 +47,33 @@ System.register("SitemapRecord", ["NestedRecord"], function (exports_2, context_
                 { id: 3, name: 'young zoe', age: 18, gender: false, parentId: 2 },
             ];
             mapping = new Map();
-            for (var _i = 0, records_1 = records; _i < records_1.length; _i++) {
-                var record = records_1[_i];
+            while (records.length > 0) {
+                var record = records.shift();
                 if (record.parentId) {
                     var parent_1 = mapping.get(record.parentId);
-                    if (!parent_1) {
-                        parent_1 = NestedRecord_1.NestedRecord.wrap(record);
-                        mapping.set(record.id, parent_1);
+                    if (parent_1) {
+                        parent_1.child(NestedRecord_1.NestedRecord.wrap(record));
                     }
-                    parent_1.child(record);
+                    else {
+                        records.push(record);
+                    }
                 }
                 else {
                     mapping.set(record.id, NestedRecord_1.NestedRecord.wrap(record));
                 }
             }
+            // for(const record of records) {
+            //     if (record.parentId) {
+            //         let parent = mapping.get(record.parentId);
+            //         if(!parent)  {
+            //             parent = NestedRecord.wrap(record);
+            //             mapping.set(record.id, parent);    
+            //         } 
+            //         parent.child(record);
+            //     } else {
+            //         mapping.set(record.id, NestedRecord.wrap(record));
+            //     }
+            // }
             v = mapping.get(1);
             console.log(Array.from(mapping.values()));
             debugger;
