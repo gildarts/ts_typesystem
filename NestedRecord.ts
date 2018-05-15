@@ -14,6 +14,10 @@ export class NestedRecord<T> {
         this.children.push(NestedRecord.wrap(child));
     }
 
+    childValue(child: ValueObject<T>) {
+        this.children.push(child);
+    }
+
     getFields(): string[] {
 
         const allFields: string[] = [];

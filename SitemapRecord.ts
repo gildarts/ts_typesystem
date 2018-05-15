@@ -18,48 +18,16 @@ const records: SitemapData[] = [
 ]
 
 const mapping = new Map<number, SitemapRecord>();
-const circularCount = new Map<number, number>(); //環參照
 
-while(records.length > 0) {
-    const record = records.shift()!;
-    let exists = false;
-
-    if(!mapping.get(record.id)) {
-        mapping.set(record.id, NestedRecord.wrap(record));
-    } else {
-        exists = true;
-    }
-
-    const wrap = mapping.get(record.id)!;
-
-    if(record.parentId) {
-        const parent = mapping.get(record.parentId);
-
-        if(parent) {
-            parent.child(wrap);
-        } else {
-            if(exists) throw new Error(`資料錯誤：${record.id}`);
-            records.push(record);
-        }
-    }
+for(const record of records) {
+    mapping.set(record.id, NestedRecord.wrap(record));
 }
 
-// for(const record of records) {
-    
-//     if (record.parentId) {
-//         let parent = mapping.get(record.parentId);
-
-//         if(!parent)  {
-//             parent = NestedRecord.wrap(record);
-//             mapping.set(record.id, parent);    
-//         } 
-
-//         parent.child(record);
-
-//     } else {
-//         mapping.set(record.id, NestedRecord.wrap(record));
-//     }
-// }
+for(const sitemap of Array.from(mapping.values())) {
+    if(mapping.has(sitemap.parentId!)) {
+        mapping.get(sitemap.parentId!)!.childValue(sitemap);
+    }
+}
 
 const output = Array.from(mapping.values());
 

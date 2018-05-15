@@ -8,41 +8,16 @@ var records = [
     { id: 4, name: 'big', age: 100, gender: false, parentId: 3 },
 ];
 var mapping = new Map();
-var circularCount = new Map(); //環參照
-while (records.length > 0) {
-    var record = records.shift();
-    var exists = false;
-    if (!mapping.get(record.id)) {
-        mapping.set(record.id, NestedRecord_1.NestedRecord.wrap(record));
-    }
-    else {
-        exists = true;
-    }
-    var wrap = mapping.get(record.id);
-    if (record.parentId) {
-        var parent_1 = mapping.get(record.parentId);
-        if (parent_1) {
-            parent_1.child(wrap);
-        }
-        else {
-            if (exists)
-                throw new Error("\u8CC7\u6599\u932F\u8AA4\uFF1A" + record.id);
-            records.push(record);
-        }
+for (var _i = 0, records_1 = records; _i < records_1.length; _i++) {
+    var record = records_1[_i];
+    mapping.set(record.id, NestedRecord_1.NestedRecord.wrap(record));
+}
+for (var _a = 0, _b = Array.from(mapping.values()); _a < _b.length; _a++) {
+    var sitemap = _b[_a];
+    if (mapping.has(sitemap.parentId)) {
+        mapping.get(sitemap.parentId).childValue(sitemap);
     }
 }
-// for(const record of records) {
-//     if (record.parentId) {
-//         let parent = mapping.get(record.parentId);
-//         if(!parent)  {
-//             parent = NestedRecord.wrap(record);
-//             mapping.set(record.id, parent);    
-//         } 
-//         parent.child(record);
-//     } else {
-//         mapping.set(record.id, NestedRecord.wrap(record));
-//     }
-// }
 var output = Array.from(mapping.values());
 var filtered = output.filter(function (v) { return v.parentId ? false : true; });
 console.log(output);

@@ -10,6 +10,9 @@ var NestedRecord = /** @class */ (function () {
     NestedRecord.prototype.child = function (child) {
         this.children.push(NestedRecord.wrap(child));
     };
+    NestedRecord.prototype.childValue = function (child) {
+        this.children.push(child);
+    };
     NestedRecord.prototype.getFields = function () {
         var allFields = [];
         for (var _i = 0, _a = Object.getOwnPropertyNames(this); _i < _a.length; _i++) {
